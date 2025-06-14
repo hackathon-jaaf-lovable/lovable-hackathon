@@ -8,7 +8,13 @@ Install dependencies and start the server:
 
 ```bash
 npm install
-node server.js
+npm run start
+```
+
+During development you can run the app with hot reload using:
+
+```bash
+npm run dev
 ```
 
 Then visit `http://localhost:3000` in your browser.

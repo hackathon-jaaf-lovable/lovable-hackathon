@@ -25,7 +25,7 @@ function AudienceSimulator() {
   return (
     <div className="box">
       <h2 className="title is-4">Audience Simulator</h2>
-      <div id="chat-box">
+      <div className="chat-box">
         {messages.map((m, i) => (
           <div key={i}><strong>{m.from}:</strong> {m.text}</div>
         ))}
@@ -43,8 +43,9 @@ function AudienceSimulator() {
 }
 
 function SpeechCoach() {
-  const [tips, setTips] = useState('');
+  const [messages, setMessages] = useState([]);
   const videoRef = useRef();
+  const inputRef = useRef();
 
   useEffect(() => {
     navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
@@ -52,18 +53,41 @@ function SpeechCoach() {
     });
   }, []);
 
-  const analyze = async () => {
-    const resp = await fetch('/analyze', { method: 'POST' });
-    const data = await resp.json();
-    setTips(data.tips);
+  const sendMessage = async () => {
+    const text = inputRef.current.value;
+    if (!text) return;
+    setMessages(msgs => [...msgs, { from: 'You', text }]);
+    inputRef.current.value = '';
+    try {
+      const resp = await fetch('/coach', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text })
+      });
+      const data = await resp.json();
+      setMessages(msgs => [...msgs, { from: 'Coach', text: data.response }]);
+    } catch (err) {
+      setMessages(msgs => [...msgs, { from: 'Error', text: err.message }]);
+    }
   };
 
   return (
     <div className="box">
       <h2 className="title is-4">Speech Coach</h2>
       <video ref={videoRef} width="480" height="360" autoPlay className="mb-2"></video>
-      <button className="button is-info" onClick={analyze}>Analyze Body Language</button>
-      <div className="mt-2">{tips}</div>
+      <div className="chat-box">
+        {messages.map((m, i) => (
+          <div key={i}><strong>{m.from}:</strong> {m.text}</div>
+        ))}
+      </div>
+      <div className="field has-addons">
+        <div className="control is-expanded">
+          <input ref={inputRef} className="input" type="text" placeholder="Ask for feedback" />
+        </div>
+        <div className="control">
+          <button className="button is-info" onClick={sendMessage}>Send</button>
+        </div>
+      </div>
     </div>
   );
 }

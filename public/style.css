@@ -1,7 +1,7 @@
 body {
   font-family: Arial, sans-serif;
 }
-#chat-box {
+.chat-box {
   border: 1px solid #ccc;
   height: 300px;
   overflow-y: auto;

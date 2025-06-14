@@ -1,21 +1,14 @@
 # Lovable Hackathon: Public Speaking Trainer
 
-This repo contains a simple Flask web application that can be imported into Lovable.
-It provides two main features:
-
-1. **Audience Simulator** – Chat with virtual audience agents backed by OpenAI
-   (if an API key is configured) or a simple echo fallback.
-2. **Speech Coach** – Capture webcam input and request analysis from the server.
-   The current server implementation returns a placeholder tip but can be extended
-   with Mediapipe to process body language.
+This repo now contains a small Node + React web application. It simulates an audience you can chat with and provides a placeholder speech coach using your webcam. The audience can optionally use the OpenAI API if the `OPENAI_API_KEY` environment variable is set.
 
 ## Running Locally
 
 Install dependencies and start the server:
 
 ```bash
-pip install -r requirements.txt
-python app/main.py
+npm install
+node server.js
 ```
 
-Visit `http://localhost:5000` in your browser.
+Then visit `http://localhost:3000` in your browser.
